@@ -2,12 +2,12 @@
 using IdentityServer4;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using IdServer.DB;
 using IRentd.IdServer.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Rentd.Data;
 using Rentd.IdServer.Models;
 using System;
 using System.Collections.Generic;

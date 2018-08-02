@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 ///////////////////////////////////////////////////////
 
-namespace IdServer.DB
+namespace Rentd.Data
 {
     public class User : IdentityUser
     {

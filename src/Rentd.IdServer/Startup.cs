@@ -1,6 +1,5 @@
 ﻿using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using IdServer.DB;
 using IdServer.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Rentd.Data;
+using Rentd.IdServer;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -34,7 +35,7 @@ namespace IdServer
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy(levelSwitch)
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .WriteTo.File("C:\\logs\\rentd\\log.txt")
                 .CreateLogger();
         }
@@ -92,11 +93,6 @@ namespace IdServer
 
             //get allwoed client (api apps) profiles
             services.AddScoped<IClientStore,RentdClientStore>();
-
-            //authorize endpoints that only apis are allowed
-            services.AddAuthorization(o => {
-                o.AddPolicy("WebAPI1", policy => policy.RequireClaim("scope","RENTDAPI1"));
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

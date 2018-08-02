@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 ////////////////////////////////////////////////////////////////////////
 
-namespace IdServer.DB
+namespace Rentd.Data
 {
     
     public class IdContext : IdentityDbContext

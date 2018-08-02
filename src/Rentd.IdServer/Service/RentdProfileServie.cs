@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Rentd.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace IdServer.DB
+namespace Rentd.IdServer
 {
     public class RentdProfileServie : AspNetIdentityProfileService<User>
     {

@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rentd.IdServer", "Rentd.IdServer\Rentd.IdServer.csproj", "{3B9832C0-F694-4DC1-A4DB-06E1056C85C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rentd.API", "Rentd.API\Rentd.API.csproj", "{A947186B-173A-4725-B7A1-039D607E7F47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rentd.API", "Rentd.API\Rentd.API.csproj", "{A947186B-173A-4725-B7A1-039D607E7F47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rentd.WebClient", "Rentd.WebClient\Rentd.WebClient.csproj", "{1960D8E4-FAFF-4989-A574-8267C40EFA14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rentd.Data", "Rentd.Data\Rentd.Data.csproj", "{2347ECEB-69B1-4CC7-A303-838EE835D3E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{A947186B-173A-4725-B7A1-039D607E7F47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A947186B-173A-4725-B7A1-039D607E7F47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A947186B-173A-4725-B7A1-039D607E7F47}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1960D8E4-FAFF-4989-A574-8267C40EFA14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1960D8E4-FAFF-4989-A574-8267C40EFA14}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1960D8E4-FAFF-4989-A574-8267C40EFA14}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1960D8E4-FAFF-4989-A574-8267C40EFA14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2347ECEB-69B1-4CC7-A303-838EE835D3E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2347ECEB-69B1-4CC7-A303-838EE835D3E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2347ECEB-69B1-4CC7-A303-838EE835D3E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2347ECEB-69B1-4CC7-A303-838EE835D3E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

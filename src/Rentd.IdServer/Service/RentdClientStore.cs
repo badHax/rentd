@@ -1,13 +1,14 @@
 ﻿using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.Options;
+using Rentd.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static IdentityServer4.IdentityServerConstants;
 
-namespace IdServer.DB
+namespace Rentd.IdServer
 {
     public class RentdClientStore : IClientStore
     {

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace IdServer.DB
+namespace Rentd.IdServer
 {
     public class AspNetIdentityProfileService<T> : IProfileService where T: IdentityUser
     {
