@@ -73,12 +73,16 @@ namespace IdServer
                     o.UserInteraction.LogoutUrl = "/logout";
                     o.UserInteraction.LoginUrl = "/login";
                 })
-                .AddConfigurationStore(o =>
-                o.ConfigureDbContext(new DbContextOptionsBuilder()
-                        .UseSqlServer(Configuration["Data:IdContext:ConnectionString"])))
-                .AddOperationalStore(o => 
-                    o.ConfigureDbContext(new DbContextOptionsBuilder()
-                        .UseSqlServer(Configuration["Data:IdContext:ConnectionString"])))
+                .AddConfigurationStore(options => {
+                    options.ConfigureDbContext = builder =>
+                        builder.UseSqlServer(Configuration["Data:IdContext:ConnectionString"],
+                            sql => sql.EnableRetryOnFailure());
+                })
+                .AddOperationalStore(options => {
+                    options.ConfigureDbContext = builder =>
+                        builder.UseSqlServer(Configuration["Data:IdContext:ConnectionString"],
+                            sql => sql.EnableRetryOnFailure());
+                })
                 .AddSigningCredential(new LoadCert(Log.Logger).LoadCertificate(_env))
                 .AddAspNetIdentity<User>();
             services.AddMvc();
