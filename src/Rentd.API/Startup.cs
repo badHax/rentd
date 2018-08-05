@@ -4,15 +4,22 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Rentd.Data;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using System.Buffers;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Text;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -61,13 +68,14 @@ namespace Rentd.API
             );
 
             //add identity(user account management framework)
-            services.AddIdentity<User, IdentityRole>(o =>
+            services.AddIdentity<User,IdentityRole>(o =>
             {
                 o.Password.RequireDigit = false;
                 o.Password.RequiredLength = 8;
                 o.Password.RequireLowercase = false;
                 o.Password.RequireUppercase = false;
                 o.Password.RequireDigit = false;
+                o.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<IdContext>()
             .AddDefaultTokenProviders();
@@ -76,36 +84,72 @@ namespace Rentd.API
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             //Add Jwt Authentication to the DI
-            services.AddAuthentication(options => {
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(jwtOptions => {
-                    jwtOptions.Audience = "";
-                    jwtOptions.Authority = "";
-                });
+            services
+                .AddAuthentication(options => {
+                    options.DefaultScheme =
+                    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                //.AddOpenIdConnect(oidcOpts => {
+                //    oidcOpts.ClientId = "";
+                //    oidcOpts.ClientSecret = "";
+                //    oidcOpts.SignInScheme = "Cookies";
+                //    oidcOpts.Authority = ""; //auth server
+                //    oidcOpts.SignedOutRedirectUri = ""; //the webapp
+                //    oidcOpts.RequireHttpsMetadata = true;
+                //    oidcOpts.SaveTokens = true;
+                //    oidcOpts.GetClaimsFromUserInfoEndpoint = true;
 
-            services.AddMvc(options => {
-                options.Filters.Add(new GlobalExceptionFilter(Log.Logger.ForContext<GlobalExceptionFilter>()));
-            });
+                //    oidcOpts.Scope.Clear();
+                //    oidcOpts.Scope.Add("profile");
+                //    oidcOpts.Scope.Add("RENTDAPI1");
+                //    oidcOpts.Scope.Add("offline_access");
+                //})
+                .AddJwtBearer(jwtOptions => {
+                    jwtOptions.Audience = Configuration["AppSettings:BaseUrls:Auth"];
+                    jwtOptions.Authority = Configuration["AppSettings:BaseUrls:Auth"]+"/resources";//IDserver
+                    jwtOptions.IncludeErrorDetails = true;
+                    jwtOptions.RequireHttpsMetadata = false;
+
+                    //jwtOptions.TokenValidationParameters = new TokenValidationParameters() {
+                    //    ValidateIssuer = true,
+                    //    ValidIssuer = "",
+                    //    ValidateAudience = true,
+                    //    ValidAudience = "",
+                    //    ValidateIssuerSigningKey = true,
+                    //    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(""))
+                    //};
+                });
 
             //authorize endpoints that only apis are allowed
             services.AddAuthorization(o => {
-                o.AddPolicy("WebAPI1", policy => policy.RequireClaim("scope", "RENTDAPI1"));
+                o.AddPolicy("api1_access", policy => policy.RequireClaim("scope", "RENTDAPI1"));
             });
+
+            //database
+            services.AddDbContext<IdContext>();
+
+            //Add mvc services to the DI
+            services.AddMvc(options => {
+                options.OutputFormatters.Add(new JsonOutputFormatter(new JsonSerializerSettings() {
+                    Culture = CultureInfo.InvariantCulture
+                }, charPool: ArrayPool<char>.Shared));
+                options.Filters.Add(new GlobalExceptionFilter(Log.Logger.ForContext<GlobalExceptionFilter>()));
+            });
+
+            
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            loggerFactory.AddSerilog();
             app.UseMvc();
         }
 

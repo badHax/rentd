@@ -13,6 +13,7 @@ using Rentd.IdServer;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using System.IO;
 
 namespace IdServer
 {
@@ -36,7 +37,7 @@ namespace IdServer
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy(levelSwitch)
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .WriteTo.File("C:\\logs\\rentd\\log.txt")
+                .WriteTo.File(Path.Combine(env.ContentRootPath, "logs\\log.txt"))
                 .CreateLogger();
         }
 
@@ -56,7 +57,7 @@ namespace IdServer
             );
 
             //add identity(user account management framework)
-            services.AddIdentity<User, IdentityRole>(o => 
+            services.AddIdentity<User,IdentityRole>(o => 
             {
                 o.Password.RequireDigit = false;
                 o.Password.RequiredLength = 8;
@@ -86,13 +87,14 @@ namespace IdServer
                 })
                 .AddSigningCredential(new LoadCert(Log.Logger).LoadCertificate(_env))
                 .AddAspNetIdentity<User>();
-            services.AddMvc();
 
             //get allowed user profiles
             services.AddScoped<IProfileService, RentdProfileServie>();
 
             //get allwoed client (api apps) profiles
             services.AddScoped<IClientStore,RentdClientStore>();
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

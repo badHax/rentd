@@ -10,7 +10,7 @@ namespace Rentd.API.Controllers
     {
         //testing
         [HttpGet("dashboard")]
-        [Authorize(Policy = "RENTDAPI1")]
+        [Authorize(Policy = "api1_access")]
         public IEnumerable<string> Dashboard()
         {
             return new string[] { "profile info"};
