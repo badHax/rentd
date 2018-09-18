@@ -6,5 +6,7 @@ namespace Rentd.API.Models
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public string UserName { get; set; }
+        public string AccountLocked { get; set; }
+        public string LoginAttempts { get; set; }
     }
 }
